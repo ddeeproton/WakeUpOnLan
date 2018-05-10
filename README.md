@@ -27,6 +27,8 @@ You must be on the same network lan.
 
 Broadcasting must be allowed on the network.
 
+Wake UP On Lan must be activated on BIOS.
+
 You can use this application on command line, like this:
 
 WakeUpOnLan.exe 00-00-00-00-00-00
