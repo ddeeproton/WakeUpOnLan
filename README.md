@@ -56,3 +56,7 @@ Add PopupMenu on ListMAC
 ### v1.0.3
 
 Fix issue on Win32
+
+### v1.0.4
+
+Fix design

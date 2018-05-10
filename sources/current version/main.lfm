@@ -3,7 +3,7 @@ object Form1: TForm1
   Height = 227
   Top = 161
   Width = 238
-  Caption = 'WakeUPOnLan v0.0.3'
+  Caption = 'WakeUPOnLan v0.0.4'
   ClientHeight = 227
   ClientWidth = 238
   Color = 4144959
@@ -593,7 +593,6 @@ object Form1: TForm1
     Width = 82
     Caption = 'Wake UP All'
     Color = clBlack
-    Font.Color = clWhite
     Font.Style = [fsBold]
     OnClick = BtnWakeupClick
     ParentFont = False
@@ -605,7 +604,6 @@ object Form1: TForm1
     Width = 40
     Caption = '+'
     Color = clBlack
-    Font.Color = clWhite
     Font.Style = [fsBold]
     OnClick = BtnAddClick
     ParentFont = False
@@ -617,7 +615,6 @@ object Form1: TForm1
     Width = 40
     Caption = '-'
     Color = clBlack
-    Font.Color = clWhite
     Font.Style = [fsBold]
     OnClick = BtnRemoveClick
     ParentFont = False
