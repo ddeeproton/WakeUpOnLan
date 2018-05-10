@@ -16,3 +16,7 @@ https://github.com/ddeeproton/xmrig-nvidia-manager/tree/master/sources
 Download Lazarus for Windows and build it. 
 
 http://www.lazarus-ide.org/index.php?page=downloads
+
+### Original source: 
+
+https://codes-sources.commentcamarche.net/source/39318-wake-on-lan
