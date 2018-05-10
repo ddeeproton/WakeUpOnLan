@@ -85,39 +85,32 @@ begin
     data.Add(ListMAC.Items.Item[i].Caption);
   if data.Count = 0 then Exit;
   FilesManager.WriteStringListInFile('NameList.txt', data);
-  if not FileExists('NameList.txt') then MessageBoxA( Handle, PChar('Attention : Un problème empêche de sauvegarder la liste.'), PChar('Incorrect'), MB_ICONERROR );
+  if not FileExists('NameList.txt') then MessageBoxA( Handle, PChar('Warning : Database save fail!'), PChar('Warning'), MB_ICONERROR );
   // Save Mac
   data := TStringList.Create;
   for i := 0 to ListMAC.Items.Count -1 do
     data.Add(ListMAC.Items.Item[i].SubItems[0]);
   if data.Count = 0 then Exit;
   FilesManager.WriteStringListInFile('MacList.txt', data);
-  if not FileExists('MacList.txt') then MessageBoxA( Handle, PChar('Attention : Un problème empêche de sauvegarder la liste.'), PChar('Incorrect'), MB_ICONERROR );
+  if not FileExists('MacList.txt') then MessageBoxA( Handle, PChar('Warning : Database save fail!'), PChar('Warning'), MB_ICONERROR );
 end;
 
 procedure TForm1.BtnWakeupClick(Sender: TObject);
 var
-  Cmpt : Integer;   // Compteur
+  Cmpt : Integer;
 begin
-
-  if ( ListMAC.Items.Count = 0 ) then   // Verifie que la liste ne soit pas vide
+  if ( ListMAC.Items.Count = 0 ) then
   begin
-    MessageBoxA( Handle, PChar('Ajoutez d''abord des adresses MAC dans la liste !'), PChar('Stop'), MB_ICONWARNING );
+    MessageBoxA( Handle, PChar('First, add a computer in list!'), PChar('Stop'), MB_ICONWARNING );
     Exit;
   end;
-
-  BtnWakeup.Enabled := False;   // On désactive bouton Wake Up
-
-  for Cmpt := 0 to ( ListMAC.Items.Count - 1 ) do // Parcour la liste des adresses MAC
+  BtnWakeup.Enabled := False;
+  for Cmpt := 0 to ( ListMAC.Items.Count - 1 ) do
   begin
-    //ShowMessage(ListMAC.Items.Item[Cmpt].SubItems[0]);
-    GoWOL( ListMAC.Items.Item[Cmpt].SubItems[0] );   // On demande le reveille de la machine
-    Sleep( 1500 );                          // Attente pour eviter les collisions
+    GoWOL( ListMAC.Items.Item[Cmpt].SubItems[0] );
+    Sleep( 1500 );
   end;
-
-  //Caption := Application.Title;   // Renomme la page
-  BtnWakeup.Enabled := True;      // On résactive bouton Wake Up
-
+  BtnWakeup.Enabled := True;
 end;
 
 
@@ -151,22 +144,17 @@ var
 const
   DEFAULT_MAC = '00-00-00-00-00-00';
 begin
-
-  NewMAC := InputBox( 'Ajouter', 'Entrez une adresse MAC :', DEFAULT_MAC );   // Saisie de l'adresse
-  NewMAC := Trim( NewMAC );   // On trim pour éviter les erreurs
-
+  NewMAC := InputBox( 'Add a computer', 'Please enter a MAC adress:', DEFAULT_MAC );
+  NewMAC := Trim(NewMAC);
   if ( ( NewMAC = '' ) or ( NewMAC = DEFAULT_MAC ) ) then Exit;
-
-  // Verification de longeure
-  // ( je vous laisse ajouter les controles sur les valeurs etc..)
   if ( Length( NewMAC ) <> 17 ) then
   begin
-    MessageBoxA( Handle, PChar('L''adresse MAC que vous avez entré est incorrect !'), PChar('Incorrect'), MB_ICONWARNING );
+    MessageBoxA( Handle, PChar('Mac adress is not valid!'), PChar('Incorrect'), MB_ICONWARNING );
     Exit;
   end;
 
-  NewName := InputBox( 'Ajouter', 'Entrez un nom :', '');
-  NewName := Trim( NewName );
+  NewName := InputBox( 'Add a computer', 'Please enter a computer name:', '');
+  NewName := Trim(NewName);
   if NewName = '' then NewName := NewMAC;
 
   NewRow := ListMAC.Items.Add;
@@ -178,17 +166,13 @@ end;
 
 procedure TForm1.BtnRemoveClick(Sender: TObject);
 begin
-
-    // Verifie qu'un élément soit séléctionné
-    if ( ListMAC.ItemIndex < 0 ) then
-    begin
-      MessageBoxA( Handle, PChar('Selectionnez une adresse dans la liste avant !'), PChar('Attention'), MB_ICONWARNING );
-      Exit;
-    end;
-
-    ListMAC.Items.Delete( ListMAC.ItemIndex );  // On supprime de la liste
-
-    ConfigSave;
+  if ( ListMAC.ItemIndex < 0 ) then
+  begin
+    MessageBoxA( Handle, PChar('Please select an item before delete it!'), PChar('Warning'), MB_ICONWARNING );
+    Exit;
+  end;
+  ListMAC.Items.Delete( ListMAC.ItemIndex );
+  ConfigSave;
 end;
 
 
