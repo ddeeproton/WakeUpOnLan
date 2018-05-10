@@ -52,3 +52,7 @@ Add start on boot
 ### v1.0.2
 
 Add PopupMenu on ListMAC
+
+### v1.0.3
+
+Fix issue on Win32

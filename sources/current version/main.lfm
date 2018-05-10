@@ -3,14 +3,14 @@ object Form1: TForm1
   Height = 227
   Top = 161
   Width = 238
-  Caption = 'WakeUPOnLan v0.0.2'
+  Caption = 'WakeUPOnLan v0.0.3'
   ClientHeight = 227
   ClientWidth = 238
   Color = 4144959
   Font.Color = clWhite
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.8.2.0'
   object ImageBackground: TImage
     Left = 216
     Height = 16
