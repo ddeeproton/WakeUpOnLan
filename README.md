@@ -32,3 +32,20 @@ Wake UP On Lan must be activated on BIOS.
 You can use this application on command line, like this:
 
 WakeUpOnLan.exe 00-00-00-00-00-00
+
+Start in background:
+
+WakeUpOnLan.exe /background
+
+# Changes
+
+### v1.0.0 
+
+First commit
+
+### v1.0.1
+
+Add systray icon
+
+Add start on boot
+

@@ -6,10 +6,10 @@ interface
 
 uses
   // Dev Add
-  ElgWOL, FilesManager, Windows,
+  ElgWOL, FilesManager, Windows, Registry,
   // Automatic Add
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  Buttons, ExtCtrls, StdCtrls;
+  Buttons, ExtCtrls, StdCtrls, Menus;
 
 type
 
@@ -18,10 +18,18 @@ type
   TForm1 = class(TForm)
     BtnAdd: TSpeedButton;
     BtnRemove: TSpeedButton;
+    CheckBoxLoadOnBoot: TCheckBox;
     Image1: TImage;
     ImageBackground: TImage;
+    LabelLoadOnBoot: TLabel;
     ListMAC: TListView;
     BtnWakeup: TSpeedButton;
+    MenuItemExit: TMenuItem;
+    MenuItemHide: TMenuItem;
+    MenuItemShow: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    TrayIcon1: TTrayIcon;
+    procedure CheckBoxLoadOnBootChange(Sender: TObject);
     procedure ConfigLoad;
     procedure ConfigSave;
     procedure FormCreate(Sender: TObject);
@@ -29,6 +37,10 @@ type
     procedure BtnAddClick(Sender: TObject);
     procedure BtnRemoveClick(Sender: TObject);
     procedure BtnWakeupClick(Sender: TObject);
+    procedure LabelLoadOnBootClick(Sender: TObject);
+    procedure MenuItemExitClick(Sender: TObject);
+    procedure MenuItemHideClick(Sender: TObject);
+    procedure MenuItemShowClick(Sender: TObject);
   private
     { private declarations }
   public
@@ -49,7 +61,19 @@ var
   dataName, dataMac: TStringList;
   NewColumn: TListColumn;
   NewRow: TListItem;
+  Reg: TRegistry;
 begin
+  // Check load on boot
+  Reg := TRegistry.Create;
+  Reg.RootKey := HKEY_CURRENT_USER;
+  if Reg.OpenKey('\Software\Microsoft\Windows\CurrentVersion\Run', True) then
+  begin
+    CheckBoxLoadOnBoot.Checked := Reg.ValueExists(ExtractFileName(Application.ExeName));
+    Reg.CloseKey;
+  end;
+  Reg.Free;
+
+  // Load ListMAC
   ListMAC.Clear;
   NewColumn := ListMAC.Columns.Add;
   NewColumn.Caption := 'Name';
@@ -57,7 +81,6 @@ begin
   NewColumn := ListMAC.Columns.Add;
   NewColumn.Caption := 'MAC';
   NewColumn.Width := 110;
-  // Load
   if not FileExists('NameList.txt') then Exit;
   dataName := FilesManager.ReadFileToStringList('NameList.txt');
   if not FileExists('MacList.txt') then Exit;
@@ -73,6 +96,7 @@ begin
   end;
 
 end;
+
 
 procedure TForm1.ConfigSave;
 var
@@ -114,6 +138,22 @@ begin
 end;
 
 
+procedure TForm1.MenuItemShowClick(Sender: TObject);
+begin
+  Application.ShowMainForm := True;
+  Show;
+end;
+
+procedure TForm1.MenuItemHideClick(Sender: TObject);
+begin
+  Application.ShowMainForm := False;
+  Hide;
+end;
+
+procedure TForm1.MenuItemExitClick(Sender: TObject);
+begin
+  Application.Terminate;
+end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
@@ -122,10 +162,15 @@ begin
   // Command line (use: WakeOnLan.exe "MAC")
   if ParamCount() > 0 then
   begin
-    mac := LowerCase(ParamStr(1));
-    GoWOL(mac);
-    Application.Terminate;
-    Exit;
+    if LowerCase(ParamStr(1)).Contains('background') then
+    begin
+      MenuItemHideClick(nil);
+    end else begin
+      mac := LowerCase(ParamStr(1));
+      GoWOL(mac);
+      Application.Terminate;
+      Exit;
+    end;
   end;
   ImageBackground.Align := alClient;
   Form1.DoubleBuffered := True;
@@ -176,6 +221,30 @@ begin
 end;
 
 
+procedure TForm1.CheckBoxLoadOnBootChange(Sender: TObject);
+var
+  Reg: TRegistry;
+begin
+  Reg := TRegistry.Create;
+  Reg.RootKey := HKEY_CURRENT_USER;
+  try
+  if Reg.OpenKey('\Software\Microsoft\Windows\CurrentVersion\Run', True) then
+  begin
+    if TCheckBox(Sender).Checked then
+      Reg.WriteString(ExtractFileName(Application.ExeName), '"'+Application.ExeName+'" /background')
+    else
+      Reg.DeleteValue(ExtractFileName(Application.ExeName));
+    Reg.CloseKey;
+  end;
+  finally
+    Reg.Free;
+  end;
+end;
+
+procedure TForm1.LabelLoadOnBootClick(Sender: TObject);
+begin
+  CheckBoxLoadOnBoot.Checked:= not CheckBoxLoadOnBoot.Checked;
+end;
 
 end.
 
