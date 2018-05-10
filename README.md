@@ -49,3 +49,6 @@ Add systray icon
 
 Add start on boot
 
+### v1.0.2
+
+Add PopupMenu on ListMAC

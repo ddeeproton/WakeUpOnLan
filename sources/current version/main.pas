@@ -9,7 +9,7 @@ uses
   ElgWOL, FilesManager, Windows, Registry,
   // Automatic Add
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  Buttons, ExtCtrls, StdCtrls, Menus;
+  Buttons, ExtCtrls, StdCtrls, Menus, Types;
 
 type
 
@@ -24,10 +24,14 @@ type
     LabelLoadOnBoot: TLabel;
     ListMAC: TListView;
     BtnWakeup: TSpeedButton;
+    MenuItemRemove: TMenuItem;
+    MenuItemAdd: TMenuItem;
+    MenuItemWakeUp: TMenuItem;
     MenuItemExit: TMenuItem;
     MenuItemHide: TMenuItem;
     MenuItemShow: TMenuItem;
     PopupMenu1: TPopupMenu;
+    PopupMenuListMAC: TPopupMenu;
     TrayIcon1: TTrayIcon;
     procedure CheckBoxLoadOnBootChange(Sender: TObject);
     procedure ConfigLoad;
@@ -38,9 +42,12 @@ type
     procedure BtnRemoveClick(Sender: TObject);
     procedure BtnWakeupClick(Sender: TObject);
     procedure LabelLoadOnBootClick(Sender: TObject);
+    procedure ListMACContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
     procedure MenuItemExitClick(Sender: TObject);
     procedure MenuItemHideClick(Sender: TObject);
     procedure MenuItemShowClick(Sender: TObject);
+    procedure MenuItemWakeUpClick(Sender: TObject);
   private
     { private declarations }
   public
@@ -49,6 +56,7 @@ type
 
 var
   Form1: TForm1;
+  SelectedListItem :TListItem;
 
 implementation
 
@@ -144,6 +152,8 @@ begin
   Show;
 end;
 
+
+
 procedure TForm1.MenuItemHideClick(Sender: TObject);
 begin
   Application.ShowMainForm := False;
@@ -211,6 +221,7 @@ end;
 
 procedure TForm1.BtnRemoveClick(Sender: TObject);
 begin
+  if MessageDlg(PChar('Remove "'+ListMAC.Selected.Caption+'"?'),  mtConfirmation, [mbYes, mbNo], 0) <> IDYES then Exit;
   if ( ListMAC.ItemIndex < 0 ) then
   begin
     MessageBoxA( Handle, PChar('Please select an item before delete it!'), PChar('Warning'), MB_ICONWARNING );
@@ -244,6 +255,34 @@ end;
 procedure TForm1.LabelLoadOnBootClick(Sender: TObject);
 begin
   CheckBoxLoadOnBoot.Checked:= not CheckBoxLoadOnBoot.Checked;
+end;
+
+procedure TForm1.ListMACContextPopup(Sender: TObject; MousePos: TPoint;
+  var Handled: Boolean);
+var
+  ListItem:TListItem;
+  CurPos:TPoint;
+  isItemSelected: Boolean;
+begin
+  GetcursorPos(MousePos);
+  CurPos:=TListView(Sender).ScreenToClient(MousePos);
+  ListItem:=TListView(Sender).GetItemAt(CurPos.x,CurPos.y);
+  isItemSelected := Assigned(ListItem);
+  MenuItemWakeUp.Visible:= isItemSelected;
+  MenuItemRemove.Visible:= isItemSelected;
+  if isItemSelected then
+  begin
+    MenuItemWakeUp.Caption := 'WakeUp "'+ListItem.Caption+'"';
+    MenuItemRemove.Caption := 'Remove "'+ListItem.Caption+'"';
+  end;
+  PopupMenuListMAC.Popup(MousePos.x, MousePos.y);
+end;
+
+procedure TForm1.MenuItemWakeUpClick(Sender: TObject);
+begin
+  if not Assigned(ListMAC.Selected) then Exit;
+  GoWOL(ListMAC.Selected.SubItems[0]);
+  //ShowMessage(ListMAC.Selected.SubItems[0]);
 end;
 
 end.

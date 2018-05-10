@@ -579,17 +579,19 @@ object Form1: TForm1
     Color = clBlack
     Columns = <>
     Font.Color = clWhite
-    MultiSelect = True
     ParentFont = False
+    ReadOnly = True
+    RowSelect = True
     TabOrder = 0
     ViewStyle = vsReport
+    OnContextPopup = ListMACContextPopup
   end
   object BtnWakeup: TSpeedButton
     Left = 57
     Height = 22
     Top = 8
-    Width = 66
-    Caption = 'Wake UP'
+    Width = 82
+    Caption = 'Wake UP All'
     Color = clBlack
     Font.Color = clWhite
     Font.Style = [fsBold]
@@ -597,7 +599,7 @@ object Form1: TForm1
     ParentFont = False
   end
   object BtnAdd: TSpeedButton
-    Left = 129
+    Left = 144
     Height = 22
     Top = 8
     Width = 40
@@ -609,7 +611,7 @@ object Form1: TForm1
     ParentFont = False
   end
   object BtnRemove: TSpeedButton
-    Left = 177
+    Left = 192
     Height = 22
     Top = 8
     Width = 40
@@ -6431,6 +6433,22 @@ object Form1: TForm1
     object MenuItemExit: TMenuItem
       Caption = 'Exit'
       OnClick = MenuItemExitClick
+    end
+  end
+  object PopupMenuListMAC: TPopupMenu
+    left = 48
+    top = 72
+    object MenuItemWakeUp: TMenuItem
+      Caption = 'Wake Up'
+      OnClick = MenuItemWakeUpClick
+    end
+    object MenuItemAdd: TMenuItem
+      Caption = 'Add new'
+      OnClick = BtnAddClick
+    end
+    object MenuItemRemove: TMenuItem
+      Caption = 'Remove'
+      OnClick = BtnRemoveClick
     end
   end
 end
