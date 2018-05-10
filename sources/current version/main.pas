@@ -52,7 +52,7 @@ var
 begin
   ListMAC.Clear;
   NewColumn := ListMAC.Columns.Add;
-  NewColumn.Caption := 'Nom';
+  NewColumn.Caption := 'Name';
   NewColumn.Width := 110;
   NewColumn := ListMAC.Columns.Add;
   NewColumn.Caption := 'MAC';
