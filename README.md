@@ -24,6 +24,9 @@ http://www.lazarus-ide.org/index.php?page=downloads
 # How to use?
 
 You must be on the same network lan. 
+
 Broadcasting must be allowed on the network.
+
 You can use this application on command line, like this:
+
 WakeUpOnLan.exe 00-00-00-00-00-00
