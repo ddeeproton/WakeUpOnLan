@@ -169,6 +169,7 @@ procedure TForm1.FormCreate(Sender: TObject);
 var
   mac: String;
 begin
+  SetCurrentDir(ExtractFileDir(Application.ExeName));
   // Command line (use: WakeOnLan.exe "MAC")
   if ParamCount() > 0 then
   begin
