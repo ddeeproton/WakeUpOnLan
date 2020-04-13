@@ -24,6 +24,9 @@ type
     LabelLoadOnBoot: TLabel;
     ListMAC: TListView;
     BtnWakeup: TSpeedButton;
+    MenuItemModify: TMenuItem;
+    MenuItemName: TMenuItem;
+    MenuItemMac: TMenuItem;
     MenuItemRemove: TMenuItem;
     MenuItemAdd: TMenuItem;
     MenuItemWakeUp: TMenuItem;
@@ -44,6 +47,8 @@ type
     procedure LabelLoadOnBootClick(Sender: TObject);
     procedure ListMACContextPopup(Sender: TObject; MousePos: TPoint;
       var Handled: Boolean);
+    procedure MenuItemMacClick(Sender: TObject);
+    procedure MenuItemNameClick(Sender: TObject);
     procedure MenuItemExitClick(Sender: TObject);
     procedure MenuItemHideClick(Sender: TObject);
     procedure MenuItemShowClick(Sender: TObject);
@@ -202,14 +207,13 @@ const
 begin
   NewMAC := InputBox( 'Add a computer', 'Please enter a MAC adress:', DEFAULT_MAC );
   NewMAC := Trim(NewMAC);
-  if ( ( NewMAC = '' ) or ( NewMAC = DEFAULT_MAC ) ) then Exit;
-  if ( Length( NewMAC ) <> 17 ) then
+  if (NewMAC = '') or (NewMAC = DEFAULT_MAC) then Exit;
+  if Length(NewMAC) <> 17 then
   begin
     MessageBoxA( Handle, PChar('Mac adress is not valid!'), PChar('Incorrect'), MB_ICONWARNING );
-    Exit;
   end;
 
-  NewName := InputBox( 'Add a computer', 'Please enter a computer name:', '');
+  NewName := InputBox('Add a computer', 'Please enter a computer name:', '');
   NewName := Trim(NewName);
   if NewName = '' then NewName := NewMAC;
 
@@ -271,12 +275,55 @@ begin
   isItemSelected := Assigned(ListItem);
   MenuItemWakeUp.Visible:= isItemSelected;
   MenuItemRemove.Visible:= isItemSelected;
+  MenuItemModify.Visible:= isItemSelected;
   if isItemSelected then
   begin
     MenuItemWakeUp.Caption := 'WakeUp "'+ListItem.Caption+'"';
     MenuItemRemove.Caption := 'Remove "'+ListItem.Caption+'"';
   end;
   PopupMenuListMAC.Popup(MousePos.x, MousePos.y);
+end;
+
+procedure TForm1.MenuItemMacClick(Sender: TObject);
+var
+  i: Integer;
+  default, NewMAC: String;
+begin
+  i := ListMAC.ItemIndex;
+  if i = -1  then
+  begin
+    MessageBoxA( Handle, PChar('Please select an item before modify it!'), PChar('Warning'), MB_ICONWARNING );
+    Exit;
+  end;
+  default := ListMAC.Items[i].SubItems[0];
+  NewMAC := InputBox( 'Add a computer', 'Please enter a MAC adress:', default );
+  NewMAC := Trim(NewMAC);
+  if NewMAC = '' then Exit;
+  if Length(NewMAC) <> 17 then
+  begin
+    MessageBoxA( Handle, PChar('Mac adress is not valid!'), PChar('Incorrect'), MB_ICONWARNING );
+  end;
+  ListMAC.Items[i].SubItems[0] := NewMAC;
+  ConfigSave;
+end;
+
+procedure TForm1.MenuItemNameClick(Sender: TObject);
+var
+  i: Integer;
+  default, NewName: String;
+begin
+  i := ListMAC.ItemIndex;
+  if i = -1  then
+  begin
+    MessageBoxA( Handle, PChar('Please select an item before modify it!'), PChar('Warning'), MB_ICONWARNING );
+    Exit;
+  end;
+  default := ListMAC.Items[ListMAC.ItemIndex].Caption;
+  NewName := InputBox('Add a computer', 'Please enter a computer name:', default);
+  NewName := Trim(NewName);
+  if NewName = '' then Exit;
+  ListMAC.Items[ListMAC.ItemIndex].Caption := NewName;
+  ConfigSave;
 end;
 
 procedure TForm1.MenuItemWakeUpClick(Sender: TObject);

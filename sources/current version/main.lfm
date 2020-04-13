@@ -1,16 +1,16 @@
 object Form1: TForm1
-  Left = 395
+  Left = 266
   Height = 227
-  Top = 144
+  Top = 176
   Width = 238
-  Caption = 'WakeUPOnLan v0.0.5'
+  Caption = 'WakeUPOnLan v0.0.6'
   ClientHeight = 227
   ClientWidth = 238
   Color = 4144959
   Font.Color = clWhite
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  LCLVersion = '1.8.2.0'
+  LCLVersion = '2.0.0.4'
   object ImageBackground: TImage
     Left = 216
     Height = 16
@@ -571,7 +571,7 @@ object Form1: TForm1
     Stretch = True
   end
   object ListMAC: TListView
-    Left = 1
+    Left = -1
     Height = 170
     Top = 56
     Width = 236
@@ -1221,9 +1221,9 @@ object Form1: TForm1
   end
   object LabelLoadOnBoot: TLabel
     Left = 76
-    Height = 13
+    Height = 15
     Top = 36
-    Width = 64
+    Width = 69
     Caption = 'Start on boot'
     ParentColor = False
     OnClick = LabelLoadOnBootClick
@@ -6442,6 +6442,17 @@ object Form1: TForm1
     object MenuItemAdd: TMenuItem
       Caption = 'Add new'
       OnClick = BtnAddClick
+    end
+    object MenuItemModify: TMenuItem
+      Caption = 'Modify'
+      object MenuItemName: TMenuItem
+        Caption = 'Name'
+        OnClick = MenuItemNameClick
+      end
+      object MenuItemMac: TMenuItem
+        Caption = 'Mac'
+        OnClick = MenuItemMacClick
+      end
     end
     object MenuItemRemove: TMenuItem
       Caption = 'Remove'

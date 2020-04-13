@@ -64,3 +64,9 @@ Fix design
 ### v1.0.5
 
 Fix issue on save and load
+
+### v1.0.6
+
+Add "Modify" item to PopupMenu ListMAC
+
+Allow to enter a bad Mac Address format (but still warning)
